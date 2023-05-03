@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const { Post, User } = require('../models');
+const withAuth = require('../utils/auth');
+
 
 router.get('/', async (req, res) => {
     try {
@@ -49,7 +51,8 @@ router.get('/post/:id', async (req, res) => {
     }
 })
 
-router.get('/dashboard', async (req, res) => {
+router.get('/dashboard', withAuth, async (req, res) => {
+    // withAuth middleware to prevent access without being logged in
     try {
         const userData = await User.findByPk(rq.session.user_id, {
             attributes: { exclude: ['password'] },
